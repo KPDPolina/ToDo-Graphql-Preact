@@ -1,24 +1,3 @@
-// import { h } from 'preact';
-// import { Router } from 'preact-router';
-
-// import Header from './header';
-
-// // Code-splitting is automated for `routes` directory
-// import Home from '../routes/home';
-// import Profile from '../routes/profile';
-
-// const App = () => (
-// 	<div id="app">
-// 		<Header />
-// 		<Router>
-// 			<Home path="/" />
-// 			<Profile path="/profile/" user="me" />
-// 			<Profile path="/profile/:user" />
-// 		</Router>
-// 	</div>
-// )
-
-// export default App;
 
 import { useMutation, useQuery} from '@apollo/client';
 import { ADD_TODO, DELETE_TODO } from './mutation/todo.js';
@@ -102,30 +81,3 @@ function App() {
 export default App;
 
 
-
-  // // Add `name` to the initial state
-  // state = { value: '', name: 'world' }
-
-  // onInput = ev => {
-  //   this.setState({ value: ev.target.value });
-  // }
-
-  // // Add a submit handler that updates the `name` with the latest input value
-  // onSubmit = ev => {
-  //   // Prevent default browser behavior (aka don't submit the form here)
-  //   ev.preventDefault();
-
-  //   this.setState({ name: this.state.value });
-  // }
-
-  // render() {
-  //   return (
-  //     <div>
-  //       <h1>Hello, {this.state.name}!</h1>
-  //       <form onSubmit={this.onSubmit}>
-  //         <input type="text" value={this.state.value} onInput={this.onInput} />
-  //         <button type="submit">Update</button>
-  //       </form>
-  //     </div>
-  //   );
-  // }
