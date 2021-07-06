@@ -9,8 +9,8 @@ mutation($task: String, $complited: Boolean) {
 }
 `
 export const DELETE_TODO = gql`
-mutation($task: String) {
-    todoDelete(task:$task) {
+mutation($_id: ID!) {
+    todoDelete(_id:$_id) {
         task
         complited
     }

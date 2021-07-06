@@ -25,18 +25,20 @@ function App() {
     return <h1>Loading...</h1>
   }
 
-  const deleteTodo = (todotask) =>{
-    // e.preventDefault();
+  const deleteTodo = (e) =>{
+    e.preventDefault();
     delTodo({
       variables: {
-        task: todotask,
+        _id: e.target.value,
     }
     })
-    // getAll(e);
+    getAll(e);
   }
 
   const addTodo = (e) =>{
     e.preventDefault();
+    if(todotask === ""){console.log(`todotask is empty`); getAll(e); return 0;}
+    
     newTodo({
         variables: {
             task: todotask,
@@ -68,13 +70,12 @@ function App() {
         {todos.map(todo =>
             // eslint-disable-next-line react/jsx-key
             <div>
-              <div>{todo.task}
-              <button onClick={() => deleteTodo()}>Удалить todo</button>
+              <div>{todo.task} {todo._id}
+              <button value={todo._id} onClick={(e) => deleteTodo(e)}>Удалить todo</button>
               </div>
             </div>
           )}
       </div>
-
     </div>
     );
 }

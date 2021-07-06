@@ -5,6 +5,7 @@ const Todo = require("./models/todos.js");
 
 const typeDefs = gql`
   type Todo {
+    _id: ID!,
     task: String,
     complited: Boolean,
   }
@@ -13,7 +14,7 @@ const typeDefs = gql`
   }
   type Mutation {
     todoAdd(task: String, complited: Boolean,): Todo,
-    todoDelete(task: String): Todo,
+    todoDelete(_id: ID!): Todo,
     }
 `;
 
@@ -33,9 +34,8 @@ const resolvers = {
         return todo;
       },
       todoDelete: (parent ,args) => {
-
-        let delTodo = Todo.findOneAndDelete({ task: args.task },)
-        return delTodo;
+        let deleteTodo = Todo.findByIdAndDelete({ _id: args._id },)
+        return deleteTodo;
 
       }
     },
