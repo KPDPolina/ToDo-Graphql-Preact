@@ -1,7 +1,9 @@
 require('dotenv').config()
-const { ApolloServer, gql } = require('apollo-server');
+const { ApolloServer, gql, PubSub } = require('apollo-server');
 const mongoose = require("mongoose")
 const Todo = require("./models/todos.js");
+
+const pubsub = new PubSub();
 
 const typeDefs = gql`
   type Todo {
@@ -16,9 +18,12 @@ const typeDefs = gql`
     todoAdd(task: String, complited: Boolean,): Todo,
     todoDelete(_id: ID!): Todo,
     }
+  type Subscription {
+    listenTodo : [Todo]
+  }
 `;
 
-let todos = Todo.find({}).lean(); 
+const todos = Todo.find({}).lean(); 
 
 const resolvers = {
     Query: {
@@ -31,14 +36,21 @@ const resolvers = {
           complited: args.complited,
         });
         todo.save();
+        pubsub.publish('NEW_TODOS', {listenTodo: todos})
         return todo;
       },
       todoDelete: (parent ,args) => {
         let deleteTodo = Todo.findByIdAndDelete({ _id: args._id },)
+        pubsub.publish('NEW_TODOS', {listenTodo: todos})
         return deleteTodo;
-
       }
     },
+    Subscription: {
+      listenTodo: {
+        subscribe: () => pubsub.asyncIterator(['NEW_TODOS']),
+      }
+    },
+    
   };
 
 const server = new ApolloServer({ typeDefs, resolvers });

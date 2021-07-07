@@ -70,7 +70,7 @@ function App() {
         {todos.map(todo =>
             // eslint-disable-next-line react/jsx-key
             <div>
-              <div>{todo.task} {todo._id}
+              <div>{todo.task}
               <button value={todo._id} onClick={(e) => deleteTodo(e)}>Удалить todo</button>
               </div>
             </div>
