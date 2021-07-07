@@ -10,7 +10,7 @@ const httpLink = new HttpLink({
 });
 
 const wsLink = new WebSocketLink({
-  uri: 'ws://localhost:4000/',
+  uri: 'ws://localhost:4000/subscriptions',
   options: {
     reconnect: true
   }
@@ -24,7 +24,6 @@ const splitLink = split(
       definition.operation === 'subscription'
     );
   },
-  
   wsLink,
   httpLink,
 );
@@ -32,17 +31,17 @@ const splitLink = split(
 const client = new ApolloClient({
     uri: splitLink, //'http://localhost:4000/',
     cache: new InMemoryCache({
-      // typePolicies: {
-      //   Query: {
-      //     fields: {
-      //       todoEvery: {
-      //         merge(existing, incoming) {
-      //           return incoming;
-      //         },
-      //       },
-      //     },
-      //   },
-      // }
+      typePolicies: {
+        Query: {
+          fields: {
+            todoEvery: {
+              merge(existing, incoming) {
+                return incoming;
+              },
+            },
+          },
+        },
+      }
     }),
   })
   

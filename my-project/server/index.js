@@ -52,8 +52,13 @@ const resolvers = {
     },
     
   };
+  
+const apollo = new ApolloServer({ typeDefs, resolvers });
 
-const server = new ApolloServer({ typeDefs, resolvers });
+// ????????????????????????
+// const server = createServer()
+// apollo.installSubscriptionHandlers(server)
+
 
 async function start() {
     try{
@@ -62,7 +67,7 @@ async function start() {
             useUnifiedTopology: true,
             useFindAndModify: false
         }).then(console.log("Mongo connected!!!"))
-        server.listen().then(({ url }) => {
+        apollo.listen().then(({ url }) => {
             console.log(`🚀🚀🚀  Server ready at ${url}`);
           });
     }catch (e) {
