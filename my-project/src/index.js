@@ -1,6 +1,6 @@
 import './style';
 import App from './components/app';
-import {ApolloProvider, ApolloClient, InMemoryCache, /*split, HttpLink*/ } from '@apollo/client';
+import {ApolloProvider, ApolloClient, InMemoryCache, useSubscription/*split, HttpLink*/ } from '@apollo/client';
 import { h, render } from 'preact';
 // import { WebSocketLink } from '@apollo/client/link/ws';
 // import { getMainDefinition } from '@apollo/client/utilities';
@@ -55,7 +55,23 @@ const client = new ApolloClient({
     link: terminatingLink
 });
 
+// import { SUBSCRIPTION_TODO } from './components/mutation/todo.js';
 
+// function LatestTodo() {
+//     const { data, loading } = useSubscription(
+//       SUBSCRIPTION_TODO,
+//       {variables: {
+//         task: "nee"
+//       }}
+//     );
+//     return <div><h2>New comment: {!loading && data.listenTodo.task}</h2></div>;
+//   } 
+
+render(
+<ApolloProvider client={client}>
+  <App /> 
+  {/* <LatestTodo /> */}
+</ApolloProvider>, document.body);
 
 
 
@@ -116,4 +132,3 @@ const client = new ApolloClient({
 // // });
 
 
-render(<ApolloProvider client={client}><App /> </ApolloProvider>, document.body);

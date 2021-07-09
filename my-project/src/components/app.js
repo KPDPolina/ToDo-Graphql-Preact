@@ -7,7 +7,7 @@ import { useEffect, useState } from 'preact/hooks';
 
 function App() {
 
-  const {subscribeToMore, data, loading, refetch} = useQuery(GET_ALL_TODOS)
+  const {data, loading, refetch} = useQuery(GET_ALL_TODOS)
   const [newTodo] = useMutation(ADD_TODO)
   const [delTodo] = useMutation(DELETE_TODO)
   // const {data: subscriptionData, loading: subscriptionLoading, error: subscriptionError} = useSubscription(SUBSCRIPTION_TODO)
@@ -26,20 +26,6 @@ function App() {
   if(loading){
     return <h1>Loading...</h1>
   }
-
-
-  /// Куда подключать?
-  const subscribeToNewToDo = () =>
-    subscribeToMore({
-      document: SUBSCRIPTION_TODO, 
-      updateQuery: (currentToDo, { subscriptionData }) => {
-        if (!subscriptionData.data) return currentToDo;
-        setTodos(subscriptionData) 
-        return { todoEvery: subscriptionData }
-      }
-    })
-
-
 
   const deleteTodo = (e) =>{
     e.preventDefault();
@@ -71,7 +57,37 @@ function App() {
     e.preventDefault();
     refetch();
   }
-   
+
+  const { data: subscriptionData, loading: subscriptionLoading } = useSubscription(SUBSCRIPTION_TODO,);
+
+  if(subscriptionLoading) return (
+    <div style="padding: 20px">
+      ToDo
+    <div>
+      <form>
+        <span>Task:</span> 
+        <input value={todotask} onChange={e => setTodotask(e.target.value)} type="text" />
+          <button onClick={(e) => {addTodo(e)}}>Создать todo</button>
+      </form>        
+    </div>
+
+    <div className="todoList">
+    {todos.map(todo =>
+      // eslint-disable-next-line react/jsx-key
+      <div>
+        <div>{todo.task}
+        <button value={todo._id} onClick={(e) => deleteTodo(e)}>Удалить todo</button>
+        </div>
+      </div>
+    )}
+  </div>
+
+  </div>
+);
+  
+
+
+
     return (
       <div style="padding: 20px">
         ToDo
@@ -83,9 +99,8 @@ function App() {
         </form>        
       </div>
 
-
       <div className="todoList">
-        {todos.map(todo =>
+        {subscriptionData.listenTodo.map(todo =>
             // eslint-disable-next-line react/jsx-key
             <div>
               <div>{todo.task}
@@ -94,7 +109,6 @@ function App() {
             </div>
           )}
       </div>
-
 
     </div>
   );
