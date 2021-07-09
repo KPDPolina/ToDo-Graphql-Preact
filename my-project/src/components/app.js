@@ -1,19 +1,20 @@
 
-import { useMutation, useQuery} from '@apollo/client';
-import { ADD_TODO, DELETE_TODO } from './mutation/todo.js';
+import { useMutation, useQuery, useSubscription} from '@apollo/client';
+import { ADD_TODO, DELETE_TODO, SUBSCRIPTION_TODO } from './mutation/todo.js';
 import { GET_ALL_TODOS } from './query/todo.js';
 import { h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
 function App() {
 
-  const {data, loading, refetch} = useQuery(GET_ALL_TODOS)
+  const {subscribeToMore, data, loading, refetch} = useQuery(GET_ALL_TODOS)
   const [newTodo] = useMutation(ADD_TODO)
   const [delTodo] = useMutation(DELETE_TODO)
+  // const {data: subscriptionData, loading: subscriptionLoading, error: subscriptionError} = useSubscription(SUBSCRIPTION_TODO)
+  // const { subscriptionData, subscriptionLoading } = useSubscription(SUBSCRIPTION_TODO);
   const [todos, setTodos] = useState([])
   const [todotask, setTodotask] = useState('')
   // const [todocomplited, setTodocomplited] = useState(false)
-
 
   useEffect(() => {
     if(!loading){ 
@@ -21,9 +22,24 @@ function App() {
     }
   }, [data] )
 
+
   if(loading){
     return <h1>Loading...</h1>
   }
+
+
+  /// Куда подключать?
+  const subscribeToNewToDo = () =>
+    subscribeToMore({
+      document: SUBSCRIPTION_TODO, 
+      updateQuery: (currentToDo, { subscriptionData }) => {
+        if (!subscriptionData.data) return currentToDo;
+        setTodos(subscriptionData) 
+        return { todoEvery: subscriptionData }
+      }
+    })
+
+
 
   const deleteTodo = (e) =>{
     e.preventDefault();
@@ -63,9 +79,11 @@ function App() {
         <form>
           <span>Task:</span> 
           <input value={todotask} onChange={e => setTodotask(e.target.value)} type="text" />
-            <button onClick={(e) => addTodo(e)}>Создать todo</button>
+            <button onClick={(e) => {addTodo(e)}}>Создать todo</button>
         </form>        
       </div>
+
+
       <div className="todoList">
         {todos.map(todo =>
             // eslint-disable-next-line react/jsx-key
@@ -76,8 +94,10 @@ function App() {
             </div>
           )}
       </div>
+
+
     </div>
-    );
+  );
 }
 export default App;
 

@@ -16,3 +16,13 @@ mutation($_id: ID!) {
     }
 }
 `
+
+export const SUBSCRIPTION_TODO = gql`
+subscription listenTodo{
+    listenTodo {
+        _id
+        task
+        complited
+    }
+}
+`

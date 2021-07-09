@@ -11,4 +11,5 @@ const todosShema = new Schema({
     },
 
 })
+
 module.exports = model('Todo', todosShema) //модель под названием Todo

@@ -28,6 +28,9 @@
   },
   "dependencies": {
     "@apollo/client": "^3.3.20",
+    "apollo-link": "^1.2.14",
+    "apollo-link-http": "^1.5.17",
+    "apollo-link-ws": "^1.0.20",
     "eslint-plugin-react-hooks": "^4.2.1-alpha-ed6c091fe-20210701",
     "graphql": "^15.5.1",
     "mongoose": "^5.13.2",
